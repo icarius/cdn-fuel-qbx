@@ -28,7 +28,7 @@ if Config.FuelDebug then
 		if args[1] == nil then lib.print.debug("You forgot to put a fuel level!") return end
 		local vehicle = GetClosestVehicle()
 		SetFuel(vehicle, tonumber(args[1]))
-		exports.qbx_core:Notify(Lang:t("set_fuel_debug")..' '..args[1]..'L', 'success')
+		exports.qbx_core:Notify(locale("set_fuel_debug")..' '..args[1]..'L', 'success')
 	end, false)
 	
 	RegisterCommand('getCachedFuelPrice', function()
@@ -303,7 +303,7 @@ if Config.RenewedPhonePayment then
 				shouldRecieveDiscount = true
 			end
             if shouldRecieveDiscount == true and not QBX.PlayerData.job.onduty and Config.EmergencyServicesDiscount['ondutyonly'] then
-                exports.qbx_core:Notify(Lang:t("you_are_discount_eligible"), 'primary', 7500)
+                exports.qbx_core:Notify(locale("you_are_discount_eligible"), 'primary', 7500)
 				shouldRecieveDiscount = false
 			end
 			if shouldRecieveDiscount then
@@ -342,10 +342,10 @@ if Config.RenewedPhonePayment then
 		local cost = amount * FuelPrice
 		local tax = GlobalTax(cost)
 		local total = math.ceil(cost + tax)
-		local success = exports['qb-phone']:PhoneNotification(Lang:t("fuel_phone_header"), Lang:t("phone_notification")..total, 'fas fa-gas-pump', '#9f0e63', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
+		local success = exports['qb-phone']:PhoneNotification(locale("fuel_phone_header"), locale("phone_notification")..total, 'fas fa-gas-pump', '#9f0e63', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
 		if success then
 			if QBX.PlayerData.money['bank'] <= total then
-				exports.qbx_core:Notify(Lang:t("not_enough_money"), "error")
+				exports.qbx_core:Notify(locale("not_enough_money"), "error")
 			else
 				TriggerServerEvent('cdn-fuel:server:PayForFuel', total, "bank", FuelPrice, false, CachedFuelPrice)
 				RefuelPossible = true
@@ -379,11 +379,11 @@ RegisterNetEvent('cdn-fuel:client:OpenContextMenu', function(total, fuelamountto
 	if Config.FuelDebug then lib.print.debug("OpenContextMenu for OX sent from server.") end
 	lib.registerContext({
 		id = 'cdnconfirmationmenu',
-		title = Lang:t("menu_purchase_station_header_1")..math.ceil(total)..Lang:t("menu_purchase_station_header_2"),
+		title = locale("menu_purchase_station_header_1")..math.ceil(total)..locale("menu_purchase_station_header_2"),
 		options = {
 			{
-				title = Lang:t("menu_purchase_station_confirm_header"),
-				description = Lang:t("menu_refuel_accept"),
+				title = locale("menu_purchase_station_confirm_header"),
+				description = locale("menu_refuel_accept"),
 				icon = "fas fa-check-circle",
 				arrow = false, -- puts arrow to the right
 				event = 'cdn-fuel:client:RefuelVehicle',
@@ -393,8 +393,8 @@ RegisterNetEvent('cdn-fuel:client:OpenContextMenu', function(total, fuelamountto
 				}
 			},
 			{
-				title = Lang:t("menu_header_close"),
-				description = Lang:t("menu_refuel_cancel"),
+				title = locale("menu_header_close"),
+				description = locale("menu_refuel_cancel"),
 				icon = "fas fa-times-circle",
 				arrow = false, -- puts arrow to the right
 				onSelect = function()
@@ -423,7 +423,7 @@ RegisterNetEvent('cdn-fuel:client:RefuelMenu', function(type)
 					if Config.FuelDebug then
 						lib.print.debug("RefuelMenu: MORE THAN ZERO!")
 					end
-					exports.qbx_core:Notify(Lang:t("more_than_zero"), 'error', 7500)
+					exports.qbx_core:Notify(locale("more_than_zero"), 'error', 7500)
 				end
 			end
 		end
@@ -438,7 +438,7 @@ RegisterNetEvent('cdn-fuel:client:grabnozzle', function()
 		Wait(50)
 		QBCore.Functions.TriggerCallback('cdn-fuel:server:checkshutoff', function(result)
 			if result == true then
-				exports.qbx_core:Notify(Lang:t("emergency_shutoff_active"), 'error', 7500) ShutOff = true return
+				exports.qbx_core:Notify(locale("emergency_shutoff_active"), 'error', 7500) ShutOff = true return
 			else
 				ShutOff = false
 			end
@@ -514,7 +514,7 @@ RegisterNetEvent('cdn-fuel:client:grabnozzle', function()
 					TargetCreated = true
 					holdingnozzle = false
 					DeleteObject(fuelnozzle)
-					exports.qbx_core:Notify(Lang:t("nozzle_cannot_reach"), 'error')
+					exports.qbx_core:Notify(locale("nozzle_cannot_reach"), 'error')
 					if Config.PumpHose == true then
 						RopeUnloadTextures()
 						DeleteRope(Rope)
@@ -589,7 +589,7 @@ RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 		Wait(Config.WaitTime)
 		if Config.PlayerOwnedGasStationsEnabled and not Config.UnlimitedFuel then
 			if ReserveLevels < 1 then
-				exports.qbx_core:Notify(Lang:t("station_no_fuel"), 'error', 7500) return
+				exports.qbx_core:Notify(locale("station_no_fuel"), 'error', 7500) return
 			end
 		end
 		if Config.PlayerOwnedGasStationsEnabled then
@@ -644,7 +644,7 @@ RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 			shouldRecieveDiscount = true
 		end
 		if shouldRecieveDiscount == true and not QBX.PlayerData.job.onduty and Config.EmergencyServicesDiscount['ondutyonly'] then
-			exports.qbx_core:Notify(Lang:t("you_are_discount_eligible"), 'primary', 7500)
+			exports.qbx_core:Notify(locale("you_are_discount_eligible"), 'primary', 7500)
 			shouldRecieveDiscount = false
 		end
 		if shouldRecieveDiscount then
@@ -728,19 +728,19 @@ RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 	end
 	if fuel then
 		if not fuelAmount then lib.print.debug("Fuel Amount Nil") return end
-		if not holdingnozzle and RefuelingType ~= 'special' then exports.qbx_core:Notify(Lang:t("no_nozzle"), 'error') return end
+		if not holdingnozzle and RefuelingType ~= 'special' then exports.qbx_core:Notify(locale("no_nozzle"), 'error') return end
 		if Config.PlayerOwnedGasStationsEnabled and not Config.UnlimitedFuel and not RefuelingType == "special" then
 			if tonumber(fuelAmount) > tonumber(ReserveLevels) then
-				exports.qbx_core:Notify(Lang:t("station_not_enough_fuel"), "error") return
+				exports.qbx_core:Notify(locale("station_not_enough_fuel"), "error") return
 			end
 		end
 		if (fuelAmount + finalfuel) >= 100 then
-			exports.qbx_core:Notify(Lang:t("tank_cannot_fit"), "error")
+			exports.qbx_core:Notify(locale("tank_cannot_fit"), "error")
 		else
 			if GlobalTax(fuelAmount * FuelPrice) + (fuelAmount * FuelPrice) <= money then
 				TriggerServerEvent('cdn-fuel:server:OpenMenu', fuelAmount, inGasStation, false, purchasetype, tonumber(FuelPrice))
 			else
-				exports.qbx_core:Notify(Lang:t("not_enough_money"), 'error', 7500)
+				exports.qbx_core:Notify(locale("not_enough_money"), 'error', 7500)
 			end
 		end
 	else
@@ -756,7 +756,7 @@ RegisterNetEvent('cdn-fuel:client:SendMenuToServer', function(type)
 	if Config.ElectricVehicleCharging then
 		local isElectric = GetCurrentVehicleType(vehicle)
 		if isElectric == 'electricvehicle' then
-			exports.qbx_core:Notify(Lang:t("need_electric_charger"), 'error', 7500) return 
+			exports.qbx_core:Notify(locale("need_electric_charger"), 'error', 7500) return 
 		end
 		NotElectric = true
 	else
@@ -782,8 +782,8 @@ RegisterNetEvent('cdn-fuel:client:SendMenuToServer', function(type)
 				icon = "fas fa-gas-pump",
 				options = {
 					{
-						title = Lang:t("menu_header_cash"),
-						description = Lang:t("menu_pay_with_cash") .. playercashamount,
+						title = locale("menu_header_cash"),
+						description = locale("menu_pay_with_cash") .. playercashamount,
 						icon = "fas fa-usd",
 						arrow = false, -- puts arrow to the right
 						onSelect = function ()
@@ -791,8 +791,8 @@ RegisterNetEvent('cdn-fuel:client:SendMenuToServer', function(type)
 						end,
 					},
 					{
-						title = Lang:t("menu_header_bank"),
-						description = Lang:t("menu_pay_with_bank"),
+						title = locale("menu_header_bank"),
+						description = locale("menu_pay_with_bank"),
 						icon = "fas fa-credit-card",
 						arrow = false, -- puts arrow to the right
 						onSelect = function ()
@@ -800,8 +800,8 @@ RegisterNetEvent('cdn-fuel:client:SendMenuToServer', function(type)
 						end,
 					},
 					{
-						title = Lang:t("menu_header_close"),
-						description = Lang:t("menu_refuel_cancel"),
+						title = locale("menu_header_close"),
+						description = locale("menu_refuel_cancel"),
 						icon = "fas fa-times-circle",
 						arrow = false, -- puts arrow to the right
 						onSelect = function()
@@ -813,10 +813,10 @@ RegisterNetEvent('cdn-fuel:client:SendMenuToServer', function(type)
 			lib.showContext('cdnfueldmainmenu')
 			
 		else
-			exports.qbx_core:Notify(Lang:t("tank_already_full"), 'error')
+			exports.qbx_core:Notify(locale("tank_already_full"), 'error')
 		end
 	else
-		exports.qbx_core:Notify(Lang:t("need_electric_charger"), 'error', 7500)
+		exports.qbx_core:Notify(locale("need_electric_charger"), 'error', 7500)
 	end
 end)
 
@@ -877,7 +877,7 @@ RegisterNetEvent('cdn-fuel:client:RefuelVehicle', function(data)
 			shouldRecieveDiscount = true
 		end
 		if shouldRecieveDiscount == true and not QBX.PlayerData.job.onduty and Config.EmergencyServicesDiscount['ondutyonly'] then
-			exports.qbx_core:Notify(Lang:t("you_are_discount_eligible"), 'primary', 7500)
+			exports.qbx_core:Notify(locale("you_are_discount_eligible"), 'primary', 7500)
 			shouldRecieveDiscount = false
 		end
 		if shouldRecieveDiscount then
@@ -995,7 +995,7 @@ RegisterNetEvent('cdn-fuel:client:RefuelVehicle', function(data)
 
 			if lib.progressCircle({
 				duration = time,
-				label = Lang:t("prog_refueling_vehicle"),
+				label = locale("prog_refueling_vehicle"),
 				position = 'bottom',
 				useWhileDead = false,
 				canCancel = true,
@@ -1057,28 +1057,28 @@ end)
 
 -- Jerry Can --
 RegisterNetEvent('cdn-fuel:jerrycan:refuelmenu', function(itemData)
-	if IsPedInAnyVehicle(PlayerPedId(), false) then exports.qbx_core:Notify(Lang:t("cannot_refuel_inside"), 'error') return end
+	if IsPedInAnyVehicle(PlayerPedId(), false) then exports.qbx_core:Notify(locale("cannot_refuel_inside"), 'error') return end
 	if Config.FuelDebug then lib.print.debug("Item Data: " .. json.encode(itemData)) end
 	local vehicle = GetClosestVehicle()
 	local vehiclecoords = GetEntityCoords(vehicle)
 	local pedcoords = GetEntityCoords(PlayerPedId())
-	if GetVehicleBodyHealth(vehicle) < 100 then exports.qbx_core:Notify(Lang:t("vehicle_is_damaged"), 'error') return end
+	if GetVehicleBodyHealth(vehicle) < 100 then exports.qbx_core:Notify(locale("vehicle_is_damaged"), 'error') return end
 	local jerrycanamount = tonumber(itemData.metadata.cdn_fuel)
 
 	if holdingnozzle then
 		local fulltank
 		if jerrycanamount == Config.JerryCanCap then fulltank = true
-			GasString = Lang:t("menu_jerry_can_footer_full_gas")
+			GasString = locale("menu_jerry_can_footer_full_gas")
 		else fulltank = false
-			GasString = Lang:t("menu_jerry_can_footer_refuel_gas")
+			GasString = locale("menu_jerry_can_footer_refuel_gas")
 		end
 
 		lib.registerContext({
 			id = 'cdnrefuelmenu',
-			title = Lang:t("menu_header_jerry_can"),
+			title = locale("menu_header_jerry_can"),
 			options = {
 				{
-					title = Lang:t("menu_header_refuel_jerry_can"),
+					title = locale("menu_header_refuel_jerry_can"),
 					event = 'cdn-fuel:jerrycan:refueljerrycan',
 					args = {itemData = itemData},
 					disabled = fulltank
@@ -1090,17 +1090,17 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelmenu', function(itemData)
 		if #(vehiclecoords - pedcoords) > 2.5 then return end
 		local nogas
 		if jerrycanamount < 1 then nogas = true
-			GasString = Lang:t("menu_jerry_can_footer_no_gas")
+			GasString = locale("menu_jerry_can_footer_no_gas")
 		else nogas = false
-			GasString = Lang:t("menu_jerry_can_footer_use_gas")
+			GasString = locale("menu_jerry_can_footer_use_gas")
 		end
 
 		lib.registerContext({
 			id = 'cdnrefuelmenu2',
-			title = Lang:t("menu_header_jerry_can"),
+			title = locale("menu_header_jerry_can"),
 			options = {
 				{
-					title = Lang:t("menu_header_refuel_vehicle"),
+					title = locale("menu_header_refuel_vehicle"),
 					event = 'cdn-fuel:jerrycan:refuelvehicle',
 					args = {itemData = itemData},
 					disabled = nogas,
@@ -1121,8 +1121,8 @@ RegisterNetEvent('cdn-fuel:client:jerrycanfinalmenu', function(purchasetype)
 	if Moneyamount > math.ceil(Config.JerryCanPrice + GlobalTax(Config.JerryCanPrice)) then
 		TriggerServerEvent('cdn-fuel:server:purchase:jerrycan', purchasetype)
 	else
-		if purchasetype == 'bank' then exports.qbx_core:Notify(Lang:t("not_enough_money_in_bank"), 'error') end
-		if purchasetype == "cash" then exports.qbx_core:Notify(Lang:t("not_enough_money_in_cash"), 'error') end
+		if purchasetype == 'bank' then exports.qbx_core:Notify(locale("not_enough_money_in_bank"), 'error') end
+		if purchasetype == "cash" then exports.qbx_core:Notify(locale("not_enough_money_in_cash"), 'error') end
 	end
 end)
 
@@ -1131,25 +1131,25 @@ RegisterNetEvent('cdn-fuel:client:purchasejerrycan', function()
 
 	lib.registerContext({
 		id = 'purchasejerrycan',
-		title = Lang:t("menu_jerry_can_purchase_header")..(math.ceil(Config.JerryCanPrice + GlobalTax(Config.JerryCanPrice))),
+		title = locale("menu_jerry_can_purchase_header")..(math.ceil(Config.JerryCanPrice + GlobalTax(Config.JerryCanPrice))),
 		options = {
 			{
-				title = Lang:t("menu_header_cash"),
-				description = Lang:t("menu_pay_with_cash") .. playercashamount,
+				title = locale("menu_header_cash"),
+				description = locale("menu_pay_with_cash") .. playercashamount,
 				icon = "fas fa-usd",
 				event = 'cdn-fuel:client:jerrycanfinalmenu',
 				args = 'cash',
 			},
 			{
-				title = Lang:t("menu_header_bank"),
-				description = Lang:t("menu_pay_with_bank"),
+				title = locale("menu_header_bank"),
+				description = locale("menu_pay_with_bank"),
 				icon = "fas fa-credit-card",
 				event = 'cdn-fuel:client:jerrycanfinalmenu',
 				args = 'bank',
 			},
 			{
-				title = Lang:t("menu_header_close"),
-				description = Lang:t("menu_jerry_can_close"),
+				title = locale("menu_header_close"),
+				description = locale("menu_jerry_can_close"),
 				icon = "fas fa-times-circle",
 				onSelect = function()
 					lib.hideContext()
@@ -1173,7 +1173,7 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelvehicle', function(data)
 	if Config.ElectricVehicleCharging then
 		local isElectric = GetCurrentVehicleType(vehicle)
 		if isElectric == 'electricvehicle' then
-			exports.qbx_core:Notify(Lang:t("need_electric_charger"), 'error', 7500) return 
+			exports.qbx_core:Notify(locale("need_electric_charger"), 'error', 7500) return 
 		end
 		NotElectric = true
 	else
@@ -1188,16 +1188,16 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelvehicle', function(data)
 		end
 		if maxvehrefuel >= jerrycanfuelamount then maxvehrefuel = jerrycanfuelamount elseif maxvehrefuel < jerrycanfuelamount then maxvehrefuel = maxvehrefuel end
 
-		local refuel = lib.inputDialog(Lang:t("input_select_refuel_header"), {Lang:t("input_max_fuel_footer_1") .. maxvehrefuel .. Lang:t("input_max_fuel_footer_2")})
+		local refuel = lib.inputDialog(locale("input_select_refuel_header"), {locale("input_max_fuel_footer_1") .. maxvehrefuel .. locale("input_max_fuel_footer_2")})
 		if not refuel then return end
 		local refuelAmount = tonumber(refuel[1])
 		-- 
 		if refuel and refuelAmount then
-			if tonumber(refuelAmount) == 0 then exports.qbx_core:Notify(Lang:t("more_than_zero"), 'error') return elseif tonumber(refuelAmount) < 0 then exports.qbx_core:Notify(Lang:t("more_than_zero"), 'error') return end
-			if tonumber(refuelAmount) > jerrycanfuelamount then exports.qbx_core:Notify(Lang:t("jerry_can_not_enough_fuel"), 'error') return end
+			if tonumber(refuelAmount) == 0 then exports.qbx_core:Notify(locale("more_than_zero"), 'error') return elseif tonumber(refuelAmount) < 0 then exports.qbx_core:Notify(locale("more_than_zero"), 'error') return end
+			if tonumber(refuelAmount) > jerrycanfuelamount then exports.qbx_core:Notify(locale("jerry_can_not_enough_fuel"), 'error') return end
 			local refueltimer = Config.RefuelTime * tonumber(refuelAmount)
 			if tonumber(refuelAmount) < 10 then refueltimer = Config.RefuelTime * 10 end
-			if vehfuel + tonumber(refuelAmount) > 100 then exports.qbx_core:Notify(Lang:t("tank_cannot_fit"), 'error') return end
+			if vehfuel + tonumber(refuelAmount) > 100 then exports.qbx_core:Notify(locale("tank_cannot_fit"), 'error') return end
 			local refuelAmount = tonumber(refuelAmount)
 			JerrycanProp = CreateObject(joaat('w_am_jerrycan'), 1.0, 1.0, 1.0, true, true, false)
 			local lefthand = GetPedBoneIndex(ped, 18905)
@@ -1205,7 +1205,7 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelvehicle', function(data)
 
 			if lib.progressCircle({
 				duration = refueltimer,
-				label = Lang:t("prog_refueling_vehicle"),
+				label = locale("prog_refueling_vehicle"),
 				position = 'bottom',
 				useWhileDead = false,
 				canCancel = true,
@@ -1221,7 +1221,7 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelvehicle', function(data)
 			}) then 
 				DeleteObject(JerrycanProp)
 				StopAnimTask(ped, Config.JerryCanAnimDict, Config.JerryCanAnim, 1.0)
-				exports.qbx_core:Notify(Lang:t("jerry_can_success_vehicle"), 'success')
+				exports.qbx_core:Notify(locale("jerry_can_success_vehicle"), 'success')
 				local JerryCanItemData = data.itemData
 				local srcPlayerData = QBX.PlayerData
 				TriggerServerEvent('cdn-fuel:info', "remove", tonumber(refuelAmount), srcPlayerData, JerryCanItemData)
@@ -1229,12 +1229,12 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelvehicle', function(data)
 			else 
 				DeleteObject(JerrycanProp)
 				StopAnimTask(ped, Config.JerryCanAnimDict, Config.JerryCanAnim, 1.0)
-				exports.qbx_core:Notify(Lang:t("cancelled"), 'error')
+				exports.qbx_core:Notify(locale("cancelled"), 'error')
 			end
 		end
 
 	else
-		exports.qbx_core:Notify(Lang:t("need_electric_charger"), 'error', 7500) return 
+		exports.qbx_core:Notify(locale("need_electric_charger"), 'error', 7500) return 
 	end
 end)
 
@@ -1253,17 +1253,17 @@ RegisterNetEvent('cdn-fuel:jerrycan:refueljerrycan', function(data)
 
 
 	local JerryCanMaxRefuel = (Config.JerryCanCap - jerrycanfuelamount)
-	local refuel = lib.inputDialog(Lang:t("input_select_refuel_header"), {Lang:t("input_max_fuel_footer_1") .. JerryCanMaxRefuel .. Lang:t("input_max_fuel_footer_2")})
+	local refuel = lib.inputDialog(locale("input_select_refuel_header"), {locale("input_max_fuel_footer_1") .. JerryCanMaxRefuel .. locale("input_max_fuel_footer_2")})
 	if not refuel then return end
 	local refuelAmount = tonumber(refuel[1])
 	if refuel then
-		if tonumber(refuelAmount) == 0 then exports.qbx_core:Notify(Lang:t("more_than_zero"), 'error') return elseif tonumber(refuelAmount) < 0 then exports.qbx_core:Notify(Lang:t("more_than_zero"), 'error') return end
-		if tonumber(refuelAmount) + tonumber(jerrycanfuelamount) > Config.JerryCanCap then exports.qbx_core:Notify(Lang:t("jerry_can_not_fit_fuel"), 'error') return end
-		if tonumber(refuelAmount) > Config.JerryCanCap then exports.qbx_core:Notify(Lang:t("jerry_can_not_fit_fuel"), 'error') return end
+		if tonumber(refuelAmount) == 0 then exports.qbx_core:Notify(locale("more_than_zero"), 'error') return elseif tonumber(refuelAmount) < 0 then exports.qbx_core:Notify(locale("more_than_zero"), 'error') return end
+		if tonumber(refuelAmount) + tonumber(jerrycanfuelamount) > Config.JerryCanCap then exports.qbx_core:Notify(locale("jerry_can_not_fit_fuel"), 'error') return end
+		if tonumber(refuelAmount) > Config.JerryCanCap then exports.qbx_core:Notify(locale("jerry_can_not_fit_fuel"), 'error') return end
 		local refueltimer = Config.RefuelTime * tonumber(refuelAmount)
 		if tonumber(refuelAmount) < 10 then refueltimer = Config.RefuelTime * 10 end
 		local price = (tonumber(refuelAmount) * FuelPrice) + GlobalTax(tonumber(refuelAmount) * FuelPrice)
-		if not CanAfford(price, "cash") then exports.qbx_core:Notify(Lang:t("not_enough_money_in_cash"), 'error') return end
+		if not CanAfford(price, "cash") then exports.qbx_core:Notify(locale("not_enough_money_in_cash"), 'error') return end
 
 		JerrycanProp = CreateObject(joaat('w_am_jerrycan'), 1.0, 1.0, 1.0, true, true, false)
 		local lefthand = GetPedBoneIndex(ped, 18905)
@@ -1271,7 +1271,7 @@ RegisterNetEvent('cdn-fuel:jerrycan:refueljerrycan', function(data)
 		SetEntityVisible(fuelnozzle, false, 0)
 		if lib.progressCircle({
 			duration = refueltimer,
-			label = Lang:t("prog_jerry_can_refuel"),
+			label = locale("prog_jerry_can_refuel"),
 			position = 'bottom',
 			useWhileDead = false,
 			canCancel = true,
@@ -1288,7 +1288,7 @@ RegisterNetEvent('cdn-fuel:jerrycan:refueljerrycan', function(data)
 			SetEntityVisible(fuelnozzle, true, 0)
 			DeleteObject(JerrycanProp)
 			StopAnimTask(ped, Config.JerryCanAnimDict, Config.JerryCanAnim, 1.0)
-			exports.qbx_core:Notify(Lang:t("jerry_can_success"), 'success')
+			exports.qbx_core:Notify(locale("jerry_can_success"), 'success')
 			local srcPlayerData = QBX.PlayerData
 
 			TriggerServerEvent('cdn-fuel:info', "add", tonumber(refuelAmount), srcPlayerData, itemData)
@@ -1310,7 +1310,7 @@ RegisterNetEvent('cdn-fuel:jerrycan:refueljerrycan', function(data)
 			SetEntityVisible(fuelnozzle, true, 0)
 			DeleteObject(JerrycanProp)
 			StopAnimTask(ped, Config.JerryCanAnimDict, Config.JerryCanAnim, 1.0)
-			exports.qbx_core:Notify(Lang:t("cancelled"), 'error')
+			exports.qbx_core:Notify(locale("cancelled"), 'error')
 		end
 	end
 	
@@ -1336,7 +1336,7 @@ end
 
 -- Events --
 RegisterNetEvent('cdn-syphoning:syphon:menu', function(itemData)
-	if IsPedInAnyVehicle(PlayerPedId(), false) then exports.qbx_core:Notify(Lang:t("syphon_inside_vehicle"), 'error') return end
+	if IsPedInAnyVehicle(PlayerPedId(), false) then exports.qbx_core:Notify(locale("syphon_inside_vehicle"), 'error') return end
 	if Config.SyphonDebug then lib.print.debug("Item Data: " .. json.encode(itemData)) end
 	local vehicle = GetClosestVehicle()
 	local vehModel = GetEntityModel(vehicle)
@@ -1348,26 +1348,26 @@ RegisterNetEvent('cdn-syphoning:syphon:menu', function(itemData)
 		if Config.ElectricVehicles[vehiclename] and Config.ElectricVehicles[vehiclename].isElectric then
 			NotElectric = false
 			if Config.SyphonDebug then lib.print.debug("^2"..current.. "^5 has been found. It ^2matches ^5the Player's Vehicle: ^2"..vehiclename..". ^5This means syphoning will not be allowed.") end
-			exports.qbx_core:Notify(Lang:t("syphon_electric_vehicle"), 'error', 7500) return
+			exports.qbx_core:Notify(locale("syphon_electric_vehicle"), 'error', 7500) return
 		end
 	else
 		NotElectric = true
 	end
 	if NotElectric then
 		if #(vehiclecoords - pedcoords) > 2.5 then return end
-		if GetVehicleBodyHealth(vehicle) < 100 then exports.qbx_core:Notify(Lang:t("vehicle_is_damaged"), 'error') return end
+		if GetVehicleBodyHealth(vehicle) < 100 then exports.qbx_core:Notify(locale("vehicle_is_damaged"), 'error') return end
 		local nogas
 		local syphonfull
 
-		if tonumber(itemData.metadata.cdn_fuel) < 1 then nogas = true Nogasstring = Lang:t("menu_syphon_empty") else nogas = false Nogasstring = Lang:t("menu_syphon_refuel") end
-		if tonumber(itemData.metadata.cdn_fuel) == Config.SyphonKitCap then syphonfull = true Stealfuelstring = Lang:t("menu_syphon_kit_full") elseif GetFuel(vehicle) < 1 then syphonfull = true Stealfuelstring = Lang:t("menu_syphon_vehicle_empty") else syphonfull = false Stealfuelstring = Lang:t("menu_syphon_allowed") end -- Disable Options based on item data
+		if tonumber(itemData.metadata.cdn_fuel) < 1 then nogas = true Nogasstring = locale("menu_syphon_empty") else nogas = false Nogasstring = locale("menu_syphon_refuel") end
+		if tonumber(itemData.metadata.cdn_fuel) == Config.SyphonKitCap then syphonfull = true Stealfuelstring = locale("menu_syphon_kit_full") elseif GetFuel(vehicle) < 1 then syphonfull = true Stealfuelstring = locale("menu_syphon_vehicle_empty") else syphonfull = false Stealfuelstring = locale("menu_syphon_allowed") end -- Disable Options based on item data
 
 		lib.registerContext({
 			id = 'syphoningmenu',
 			title = 'Syphoning Kit',
 			options = {
 				{
-					title = Lang:t("menu_syphon_header"),
+					title = locale("menu_syphon_header"),
 					description = Stealfuelstring,
 					icon = "fas fa-fire-flame-simple",
 					arrow = false, -- puts arrow to the right
@@ -1379,7 +1379,7 @@ RegisterNetEvent('cdn-syphoning:syphon:menu', function(itemData)
 					disabled = syphonfull,
 				},
 				{
-					title = Lang:t("menu_syphon_refuel_header"),
+					title = locale("menu_syphon_refuel_header"),
 					description = Nogasstring,
 					icon = "fas fa-gas-pump",
 					arrow = false, -- puts arrow to the right
@@ -1391,8 +1391,8 @@ RegisterNetEvent('cdn-syphoning:syphon:menu', function(itemData)
 					disabled = nogas,
 				},
 				{
-					title = Lang:t("menu_header_close"),
-					description = Lang:t("menu_refuel_cancel"),
+					title = locale("menu_header_close"),
+					description = locale("menu_refuel_cancel"),
 					icon = "fas fa-times-circle",
 					arrow = false, -- puts arrow to the right
 					onSelect = function()
@@ -1415,7 +1415,7 @@ RegisterNetEvent('cdn-syphoning:syphon', function(data)
 	if Config.ElectricVehicleCharging then
 		local isElectric = GetCurrentVehicleType(vehicle)
 		if isElectric == 'electricvehicle' then
-			exports.qbx_core:Notify(Lang:t("need_electric_charger"), 'error', 7500) return
+			exports.qbx_core:Notify(locale("need_electric_charger"), 'error', 7500) return
 		end
 		NotElectric = true
 	else
@@ -1454,17 +1454,17 @@ RegisterNetEvent('cdn-syphoning:syphon', function(data)
 				syphonAmount = tonumber(syphon[1])
 				if syphon then
 					if not syphonAmount then return end
-					if tonumber(syphonAmount) < 0 then exports.qbx_core:Notify(Lang:t("syphon_more_than_zero"), 'error') return end
-					if tonumber(syphonAmount) == 0 then exports.qbx_core:Notify(Lang:t("syphon_more_than_zero"), 'error') return end
-					if tonumber(syphonAmount) > maxsyphon then exports.qbx_core:Notify(Lang:t("syphon_kit_cannot_fit_1").. fitamount .. Lang:t("syphon_kit_cannot_fit_2"), 'error') return end
-					if currentsyphonamount + syphonAmount > Config.SyphonKitCap then exports.qbx_core:Notify(Lang:t("syphon_kit_cannot_fit_1").. fitamount .. Lang:t("syphon_kit_cannot_fit_2"), 'error') return end
+					if tonumber(syphonAmount) < 0 then exports.qbx_core:Notify(locale("syphon_more_than_zero"), 'error') return end
+					if tonumber(syphonAmount) == 0 then exports.qbx_core:Notify(locale("syphon_more_than_zero"), 'error') return end
+					if tonumber(syphonAmount) > maxsyphon then exports.qbx_core:Notify(locale("syphon_kit_cannot_fit_1").. fitamount .. locale("syphon_kit_cannot_fit_2"), 'error') return end
+					if currentsyphonamount + syphonAmount > Config.SyphonKitCap then exports.qbx_core:Notify(locale("syphon_kit_cannot_fit_1").. fitamount .. locale("syphon_kit_cannot_fit_2"), 'error') return end
 					if (tonumber(syphonAmount) <= tonumber(cargasamount)) then
 						local removeamount = (tonumber(cargasamount) - tonumber(syphonAmount))
 						local syphontimer = Config.RefuelTime * syphonAmount
 						if tonumber(syphonAmount) < 10 then syphontimer = Config.RefuelTime * 10 end
 						if lib.progressCircle({
 							duration = syphontimer,
-							label = Lang:t("prog_syphoning"),
+							label = locale("prog_syphoning"),
 							position = 'bottom',
 							useWhileDead = false,
 							canCancel = true,
@@ -1481,18 +1481,18 @@ RegisterNetEvent('cdn-syphoning:syphon', function(data)
 							StopAnimTask(ped, Config.StealAnimDict, Config.StealAnim, 1.0)
 							if GetFuel(vehicle) >= syphonAmount then
 								PoliceAlert(GetEntityCoords(ped))
-								exports.qbx_core:Notify(Lang:t("syphon_success"), 'success')
+								exports.qbx_core:Notify(locale("syphon_success"), 'success')
 								SetFuel(vehicle, removeamount)
 								local syphonData = data.itemData
 								local srcPlayerData = QBX.PlayerData
 								TriggerServerEvent('cdn-fuel:info', "add", tonumber(syphonAmount), srcPlayerData, syphonData)
 							else
-								exports.qbx_core:Notify(Lang:t("menu_syphon_vehicle_empty"), 'error')
+								exports.qbx_core:Notify(locale("menu_syphon_vehicle_empty"), 'error')
 							end
 						else
 							PoliceAlert(GetEntityCoords(ped))
 							StopAnimTask(ped, Config.StealAnimDict, Config.StealAnim, 1.0)
-							exports.qbx_core:Notify(Lang:t("cancelled"), 'error')
+							exports.qbx_core:Notify(locale("cancelled"), 'error')
 						end
 					end
 				end
@@ -1505,19 +1505,19 @@ RegisterNetEvent('cdn-syphoning:syphon', function(data)
 					Maxrefuel = currentsyphonamount
 				end
 
-				refuel = lib.inputDialog(Lang:t("input_select_refuel_header"), {{ type = "number", label = Lang:t("input_max_fuel_footer_1") .. Maxrefuel .. Lang:t("input_max_fuel_footer_2"), default = Maxrefuel }})
+				refuel = lib.inputDialog(locale("input_select_refuel_header"), {{ type = "number", label = locale("input_max_fuel_footer_1") .. Maxrefuel .. locale("input_max_fuel_footer_2"), default = Maxrefuel }})
 
 				if not refuel then return end
 				refuelAmount = tonumber(refuel[1])
 				if refuel then
-					if tonumber(refuelAmount) == 0 then exports.qbx_core:Notify(Lang:t("more_than_zero"), 'error') return elseif tonumber(refuelAmount) < 0 then exports.qbx_core:Notify(Lang:t("more_than_zero"), 'error') return elseif tonumber(refuelAmount) > 100 then exports.qbx_core:Notify("You can't refuel more than 100L!", 'error') return end
-					if tonumber(refuelAmount) > tonumber(currentsyphonamount) then exports.qbx_core:Notify(Lang:t("syphon_not_enough_gas"), 'error') return end
-					if tonumber(refuelAmount) + tonumber(cargasamount) > 100 then exports.qbx_core:Notify(Lang:t("tank_cannot_fit"), 'error') return end
+					if tonumber(refuelAmount) == 0 then exports.qbx_core:Notify(locale("more_than_zero"), 'error') return elseif tonumber(refuelAmount) < 0 then exports.qbx_core:Notify(locale("more_than_zero"), 'error') return elseif tonumber(refuelAmount) > 100 then exports.qbx_core:Notify("You can't refuel more than 100L!", 'error') return end
+					if tonumber(refuelAmount) > tonumber(currentsyphonamount) then exports.qbx_core:Notify(locale("syphon_not_enough_gas"), 'error') return end
+					if tonumber(refuelAmount) + tonumber(cargasamount) > 100 then exports.qbx_core:Notify(locale("tank_cannot_fit"), 'error') return end
 					local refueltimer = Config.RefuelTime * tonumber(refuelAmount)
 					if tonumber(refuelAmount) < 10 then refueltimer = Config.RefuelTime * 10 end
 					if lib.progressCircle({
 						duration = refueltimer,
-						label = Lang:t("prog_refueling_vehicle"),
+						label = locale("prog_refueling_vehicle"),
 						position = 'bottom',
 						useWhileDead = false,
 						canCancel = true,
@@ -1532,22 +1532,22 @@ RegisterNetEvent('cdn-syphoning:syphon', function(data)
 						},
 					}) then
 						StopAnimTask(ped, Config.JerryCanAnimDict, Config.JerryCanAnim, 1.0)
-						exports.qbx_core:Notify(Lang:t("syphon_success_vehicle"), 'success')
+						exports.qbx_core:Notify(locale("syphon_success_vehicle"), 'success')
 						SetFuel(vehicle, cargasamount + tonumber(refuelAmount))
 						local syphonData = data.itemData
 						local srcPlayerData = QBX.PlayerData
 						TriggerServerEvent('cdn-fuel:info', "remove", tonumber(refuelAmount), srcPlayerData, syphonData)
 					else
 						StopAnimTask(ped, Config.JerryCanAnimDict, Config.JerryCanAnim, 1.0)
-						exports.qbx_core:Notify(Lang:t("cancelled"), 'error')
+						exports.qbx_core:Notify(locale("cancelled"), 'error')
 					end
 				end
 			end
 		else
-			exports.qbx_core:Notify(Lang:t("syphon_no_syphon_kit"), 'error', 7500)
+			exports.qbx_core:Notify(locale("syphon_no_syphon_kit"), 'error', 7500)
 		end
 	else
-		exports.qbx_core:Notify(Lang:t("need_electric_charger"), 'error', 7500) return 
+		exports.qbx_core:Notify(locale("need_electric_charger"), 'error', 7500) return 
 	end
 end)
 
@@ -1563,7 +1563,7 @@ RegisterNetEvent('cdn-syphoning:client:callcops', function(coords)
 	SetBlipScale(blip, 1.2)
 	SetBlipFlashes(blip, true)
 	BeginTextCommandSetBlipName('STRING')
-	AddTextComponentString(Lang:t("syphon_dispatch_string"))
+	AddTextComponentString(locale("syphon_dispatch_string"))
 	EndTextCommandSetBlipName(blip)
 	while transG ~= 0 do
 		Wait(180 * 4)
@@ -1591,7 +1591,7 @@ RegisterNetEvent('cdn-fuel:client:grabnozzle:special', function()
 	AttachEntityToEntity(SpecialFuelNozzleObj, ped, lefthand, 0.13, 0.04, 0.01, -42.0, -115.0, -63.42, 0, 1, 0, 1, 0, 1)
 	local grabbednozzlecoords = GetEntityCoords(ped)
 	HoldingSpecialNozzle = true
-	exports.qbx_core:Notify(Lang:t("show_input_key_special"))
+	exports.qbx_core:Notify(locale("show_input_key_special"))
 	if Config.PumpHose then
 		local pumpCoords, pump = GetClosestPump(grabbednozzlecoords)
 		-- Load Rope Textures
@@ -1630,7 +1630,7 @@ RegisterNetEvent('cdn-fuel:client:grabnozzle:special', function()
 			if dist > Config.AirAndWaterVehicleFueling['nozzle_length'] or IsPedInAnyVehicle(ped, false) then
 				HoldingSpecialNozzle = false
 				DeleteObject(SpecialFuelNozzleObj)
-				exports.qbx_core:Notify(Lang:t("nozzle_cannot_reach"), 'error')
+				exports.qbx_core:Notify(locale("nozzle_cannot_reach"), 'error')
 				if Config.PumpHose then
 					if Config.FuelDebug then lib.print.debug("Deleting Rope: "..tostring(Rope)) end
 					RopeUnloadTextures()
@@ -1751,11 +1751,11 @@ AddEventHandler('onResourceStart', function(resource)
 									local dist = #(GetEntityCoords(PlayerPedId()) - vehCoords) 
 									
 									if not HoldingSpecialNozzle then
-										exports.qbx_core:Notify(Lang:t("no_nozzle"), 'error', 1250)
+										exports.qbx_core:Notify(locale("no_nozzle"), 'error', 1250)
 									elseif dist > 4.5 then
-										exports.qbx_core:Notify(Lang:t("vehicle_too_far"), 'error', 1250)
+										exports.qbx_core:Notify(locale("vehicle_too_far"), 'error', 1250)
 									elseif IsPedInAnyVehicle(PlayerPedId(), true) then 
-										exports.qbx_core:Notify(Lang:t("inside_vehicle"), 'error', 1250)
+										exports.qbx_core:Notify(locale("inside_vehicle"), 'error', 1250)
 									else
 										if Config.FuelDebug then lib.print.debug("Attempting to Open Fuel menu for special vehicles.") end
 										TriggerEvent('cdn-fuel:client:RefuelMenu', 'special')
@@ -1770,7 +1770,7 @@ AddEventHandler('onResourceStart', function(resource)
 					end
 				else
 					if HoldingSpecialNozzle then
-						exports.qbx_core:Notify(Lang:t("nozzle_cannot_reach"), 'error')
+						exports.qbx_core:Notify(locale("nozzle_cannot_reach"), 'error')
 						HoldingSpecialNozzle = false
 						if Config.PumpHose then
 							if Config.FuelDebug then
@@ -1907,11 +1907,11 @@ AddEventHandler("QBCore:Client:OnPlayerLoaded", function ()
 								local dist = #(GetEntityCoords(PlayerPedId()) - vehCoords)
 
 								if not HoldingSpecialNozzle then
-									exports.qbx_core:Notify(Lang:t("no_nozzle"), 'error', 1250)
+									exports.qbx_core:Notify(locale("no_nozzle"), 'error', 1250)
 								elseif dist > 4.5 then
-									exports.qbx_core:Notify(Lang:t("vehicle_too_far"), 'error', 1250)
+									exports.qbx_core:Notify(locale("vehicle_too_far"), 'error', 1250)
 								elseif IsPedInAnyVehicle(PlayerPedId(), true) then 
-									exports.qbx_core:Notify(Lang:t("inside_vehicle"), 'error', 1250)
+									exports.qbx_core:Notify(locale("inside_vehicle"), 'error', 1250)
 								else
 									if Config.FuelDebug then lib.print.debug("Attempting to Open Fuel menu for special vehicles.") end
 									TriggerEvent('cdn-fuel:client:RefuelMenu', 'special')
@@ -1926,7 +1926,7 @@ AddEventHandler("QBCore:Client:OnPlayerLoaded", function ()
 				end
 			else
 				if HoldingSpecialNozzle then
-					exports.qbx_core:Notify(Lang:t("nozzle_cannot_reach"), 'error')
+					exports.qbx_core:Notify(locale("nozzle_cannot_reach"), 'error')
 					HoldingSpecialNozzle = false
 					if Config.PumpHose then
 						if Config.FuelDebug then
@@ -2016,7 +2016,7 @@ CreateThread(function()
 			[1] = {
 				name = 'cdn-fuel:options:1',
 				icon = "fas fa-gas-pump",
-				label = tostring(Lang:t("input_insert_nozzle")),
+				label = tostring(locale("input_insert_nozzle")),
 				canInteract = function()
 					if inGasStation and not refueling and holdingnozzle then
 						return true
@@ -2027,7 +2027,7 @@ CreateThread(function()
 			[2] = {
 				name = 'cdn-fuel:options:2',
 				icon = "fas fa-bolt",
-				label = tostring(Lang:t("insert_electric_nozzle")),
+				label = tostring(locale("insert_electric_nozzle")),
 				canInteract = function()
 					if Config.ElectricVehicleCharging == true then
 						if inGasStation and not refueling and IsHoldingElectricNozzle() then
@@ -2052,7 +2052,7 @@ CreateThread(function()
 				type = "client",
 				event = "cdn-fuel:client:grabnozzle",
 				icon = "fas fa-gas-pump",
-				label = Lang:t("grab_nozzle"),
+				label = locale("grab_nozzle"),
 				canInteract = function()
 					if PlayerInSpecialFuelZone then return false end
 					if not IsPedInAnyVehicle(PlayerPedId()) and not holdingnozzle and not HoldingSpecialNozzle and inGasStation == true and not PlayerInSpecialFuelZone then
@@ -2066,7 +2066,7 @@ CreateThread(function()
 				type = "client",
 				event = "cdn-fuel:client:purchasejerrycan",
 				icon = "fas fa-fire-flame-simple",
-				label = Lang:t("buy_jerrycan"),
+				label = locale("buy_jerrycan"),
 				canInteract = function()
 					if not IsPedInAnyVehicle(PlayerPedId()) and not holdingnozzle and not HoldingSpecialNozzle and inGasStation == true then
 						return true
@@ -2079,7 +2079,7 @@ CreateThread(function()
 				type = "client",
 				event = "cdn-fuel:client:returnnozzle",
 				icon = "fas fa-hand",
-				label = Lang:t("return_nozzle"),
+				label = locale("return_nozzle"),
 				canInteract = function()
 					if holdingnozzle and not refueling then
 						return true
@@ -2092,7 +2092,7 @@ CreateThread(function()
 				type = "client",
 				event = "cdn-fuel:client:grabnozzle:special",
 				icon = "fas fa-gas-pump",
-				label = Lang:t("grab_special_nozzle"),
+				label = locale("grab_special_nozzle"),
 				canInteract = function()
 					if Config.FuelDebug then lib.print.debug("Is Player In Special Fuel Zone?: "..tostring(PlayerInSpecialFuelZone)) end
 					if not HoldingSpecialNozzle and not IsPedInAnyVehicle(PlayerPedId()) and PlayerInSpecialFuelZone then
@@ -2106,7 +2106,7 @@ CreateThread(function()
 				type = "client",
 				event = "cdn-fuel:client:returnnozzle:special",
 				icon = "fas fa-hand",
-				label = Lang:t("return_special_nozzle"),
+				label = locale("return_special_nozzle"),
 				canInteract = function()
 					if HoldingSpecialNozzle and not IsPedInAnyVehicle(PlayerPedId()) then
 						return true
@@ -2125,7 +2125,7 @@ CreateThread(function()
 						TriggerEvent('cdn-fuel:client:RefuelMenu')
 					end,
 					icon = "fas fa-gas-pump",
-					label = Lang:t("input_insert_nozzle"),
+					label = locale("input_insert_nozzle"),
 					canInteract = function()
 						if inGasStation and not refueling and holdingnozzle then
 							return true
@@ -2138,7 +2138,7 @@ CreateThread(function()
 						TriggerEvent('cdn-fuel:client:electric:RefuelMenu')
 					end,
 					icon = "fas fa-bolt",
-					label = Lang:t("insert_electric_nozzle"),
+					label = locale("insert_electric_nozzle"),
 					canInteract = function()
 						if Config.ElectricVehicleCharging == true then
 							if inGasStation and not refueling and IsHoldingElectricNozzle() then
@@ -2162,7 +2162,7 @@ CreateThread(function()
 					type = "client",
 					event = "cdn-fuel:client:grabnozzle",
 					icon = "fas fa-gas-pump",
-					label = Lang:t("grab_nozzle"),
+					label = locale("grab_nozzle"),
 					canInteract = function()
 						if PlayerInSpecialFuelZone then return false end
 						if not IsPedInAnyVehicle(PlayerPedId()) and not holdingnozzle and not HoldingSpecialNozzle and inGasStation == true and not PlayerInSpecialFuelZone then
@@ -2175,7 +2175,7 @@ CreateThread(function()
 					type = "client",
 					event = "cdn-fuel:client:purchasejerrycan",
 					icon = "fas fa-fire-flame-simple",
-					label = Lang:t("buy_jerrycan"),
+					label = locale("buy_jerrycan"),
 					canInteract = function()
 						if not IsPedInAnyVehicle(PlayerPedId()) and not holdingnozzle and not HoldingSpecialNozzle and inGasStation == true then
 							return true
@@ -2187,7 +2187,7 @@ CreateThread(function()
 					type = "client",
 					event = "cdn-fuel:client:returnnozzle",
 					icon = "fas fa-hand",
-					label = Lang:t("return_nozzle"),
+					label = locale("return_nozzle"),
 					canInteract = function()
 						if holdingnozzle and not refueling then
 							return true
@@ -2199,7 +2199,7 @@ CreateThread(function()
 					type = "client",
 					event = "cdn-fuel:client:grabnozzle:special",
 					icon = "fas fa-gas-pump",
-					label = Lang:t("grab_special_nozzle"),
+					label = locale("grab_special_nozzle"),
 					canInteract = function()
 						if Config.FuelDebug then lib.print.debug("Is Player In Special Fuel Zone?: "..tostring(PlayerInSpecialFuelZone)) end
 						if not HoldingSpecialNozzle and not IsPedInAnyVehicle(PlayerPedId()) and PlayerInSpecialFuelZone then
@@ -2212,7 +2212,7 @@ CreateThread(function()
 					type = "client",
 					event = "cdn-fuel:client:returnnozzle:special",
 					icon = "fas fa-hand",
-					label = Lang:t("return_special_nozzle"),
+					label = locale("return_special_nozzle"),
 					canInteract = function()
 						if HoldingSpecialNozzle and not IsPedInAnyVehicle(PlayerPedId()) then
 							return true
@@ -2252,7 +2252,7 @@ CreateThread(function()
 							-- If the vehicle is on, we shut the vehicle off:
 							SetVehicleEngineOn(vehPedIsIn, false, true, true)
 							-- Then alert the client with notify.
-							exports.qbx_core:Notify(Lang:t("no_fuel"), 'error', 3500)
+							exports.qbx_core:Notify(locale("no_fuel"), 'error', 3500)
 							-- Play Sound, if enabled in config.
 							if Config.VehicleShutoffOnLowFuel['sounds']['enabled'] then
 								RequestAmbientAudioBank("DLC_PILOT_ENGINE_FAILURE_SOUNDS", 0)

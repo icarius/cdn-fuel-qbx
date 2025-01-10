@@ -13,7 +13,7 @@ RegisterNetEvent("cdn-fuel:server:electric:OpenMenu", function(amount, inGasStat
 	local FuelCost = amount*FuelPrice
 	local tax = GlobalTax(FuelCost)
 	local total = tonumber(FuelCost + tax)
-	if not amount then if Config.FuelDebug then lib.print.debug("Electric Recharge Amount is invalid!") end exports.qbx_core:Notify( src, Lang:t("electric_more_than_zero"), 'error') return end
+	if not amount then if Config.FuelDebug then lib.print.debug("Electric Recharge Amount is invalid!") end exports.qbx_core:Notify( src, locale("electric_more_than_zero"), 'error') return end
 	Wait(50)
 	if inGasStation and not hasWeapon then
 		if Config.RenewedPhonePayment and purchasetype == "bank" then

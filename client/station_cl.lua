@@ -64,7 +64,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 options = {
                     {
                         type = "client",
-                        label = Lang:t("station_talk_to_ped"),
+                        label = locale("station_talk_to_ped"),
                         icon = "fas fa-building",
                         action = function()
                             TriggerEvent('cdn-fuel:stations:openmenu', CurrentLocation)
@@ -99,7 +99,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
             AttachVehicleToTrailer(spawnedDeliveryTruck, spawnedTankerTrailer, 15.0)
             -- Now our vehicle is spawned.
             if spawnedDeliveryTruck ~= 0 and spawnedTankerTrailer ~= 0 then
-                TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(spawnedDeliveryTruck))
+                TriggerEvent("vehiclekeys:client:SetOwner", qbx.getVehiclePlate(spawnedDeliveryTruck))
                 return true
             else
                 return false
@@ -134,7 +134,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
             }
 
             if SpawnPickupVehicles() then
-                exports.qbx_core:Notify(Lang:t("fuel_order_ready"), 'success')
+                exports.qbx_core:Notify(locale("fuel_order_ready"), 'success')
                 SetNewWaypoint(Config.DeliveryTruckSpawns['truck'].x, Config.DeliveryTruckSpawns['truck'].y)
                 SetUseWaypointAsDestination(true)
                 ReservePickupData.blip = CreateBlip(vector3(Config.DeliveryTruckSpawns['truck'].x, Config.DeliveryTruckSpawns['truck'].y, Config.DeliveryTruckSpawns['truck'].z), "Truck Pickup")
@@ -197,7 +197,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                                                                 if distBetweenTruckAndTrailer > 10.0 then
                                                                     distBetweenTruckAndTrailer = nil
                                                                     if not stopNotifyTemp then
-                                                                        exports.qbx_core:Notify(Lang:t("trailer_too_far"), 'error', 7500)
+                                                                        exports.qbx_core:Notify(locale("trailer_too_far"), 'error', 7500)
                                                                     end
                                                                     stopNotifyTemp = true
                                                                     Wait(1000)
@@ -254,7 +254,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                                                     else
                                                         hasArrivedAtLocation = true
 
-                                                        lib.showTextUI(Lang:t("draw_text_fuel_dropoff"), {
+                                                        lib.showTextUI(locale("draw_text_fuel_dropoff"), {
                                                             position = 'left-center'
                                                         })
 
@@ -302,7 +302,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
         if not IsOwned then
             TriggerServerEvent('cdn-fuel:server:buyStation', location, CitizenID)
         elseif IsOwned then
-            exports.qbx_core:Notify(Lang:t("station_already_owned"), 'error', 7500)
+            exports.qbx_core:Notify(locale("station_already_owned"), 'error', 7500)
         end
     end)
 
@@ -317,7 +317,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..location.." is owned by ID: "..CitizenID) end
                 CanSell = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..location.." is not owned by ID: "..CitizenID) end
                 CanSell = false
             end
@@ -328,7 +328,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
             TriggerServerEvent('cdn-fuel:stations:server:sellstation', location)
             if Config.FuelDebug then lib.print.debug("Event Triggered") end
         else
-            exports.qbx_core:Notify(Lang:t("station_cannot_sell"), 'error', 7500)
+            exports.qbx_core:Notify(locale("station_cannot_sell"), 'error', 7500)
         end
     end)
 
@@ -345,7 +345,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..location.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..location.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -356,11 +356,11 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
 
                 lib.registerContext({
                     id = 'purchasereservesmenu',
-                    title = Lang:t("menu_station_reserves_header")..Config.GasStations[location].label,
+                    title = locale("menu_station_reserves_header")..Config.GasStations[location].label,
                     options = {
                         {
-                            title = Lang:t("menu_station_reserves_purchase_header")..price,
-                            description = Lang:t("menu_station_reserves_purchase_footer")..price.."!",
+                            title = locale("menu_station_reserves_purchase_header")..price,
+                            description = locale("menu_station_reserves_purchase_footer")..price.."!",
                             icon = "fas fa-usd",
                             arrow = false, -- puts arrow to the right
                             event = 'cdn-fuel:stations:client:buyreserves',
@@ -371,8 +371,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                             }
                         },
                         {
-                            title = Lang:t("menu_header_close"),
-                            description = Lang:t("menu_ped_close_footer"),
+                            title = locale("menu_header_close"),
+                            description = locale("menu_ped_close_footer"),
                             icon = "fas fa-times-circle",
                             arrow = false, -- puts arrow to the right
                             onSelect = function()
@@ -397,7 +397,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -429,11 +429,11 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("Attempting to buy reserves!") end
                 Wait(100)
                 local amount = reservesAmount
-                if not reservesAmount then exports.qbx_core:Notify(Lang:t("station_amount_invalid"), 'error', 7500) return end
+                if not reservesAmount then exports.qbx_core:Notify(locale("station_amount_invalid"), 'error', 7500) return end
                 Reservebuyamount = tonumber(reservesAmount)
-                if Reservebuyamount < 1 then exports.qbx_core:Notify(Lang:t("station_more_than_one"), 'error', 7500) return end
+                if Reservebuyamount < 1 then exports.qbx_core:Notify(locale("station_more_than_one"), 'error', 7500) return end
                 if (Reservebuyamount + Currentreserveamount) > Config.MaxFuelReserves then
-                    exports.qbx_core:Notify(Lang:t("station_reserve_cannot_fit"), "error")
+                    exports.qbx_core:Notify(locale("station_reserve_cannot_fit"), "error")
                 else
                     if math.ceil(GlobalTax(Reservebuyamount * Config.FuelReservesPrice) + (Reservebuyamount * Config.FuelReservesPrice)) <= bankmoney then
                         local price = math.ceil(GlobalTax(Reservebuyamount * Config.FuelReservesPrice) + (Reservebuyamount * Config.FuelReservesPrice))
@@ -441,7 +441,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                         TriggerEvent("cdn-fuel:stations:client:purchasereserves:final", location, price, amount)
 
                     else
-                        exports.qbx_core:Notify(Lang:t("not_enough_money_in_bank"), 'error', 7500)
+                        exports.qbx_core:Notify(locale("not_enough_money_in_bank"), 'error', 7500)
                     end
                 end
             end
@@ -457,7 +457,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -481,11 +481,11 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
             if fuelprice then
                 if Config.FuelDebug then lib.print.debug("Attempting to change fuel price!") end
                 Wait(100)
-                if not fuelPrice then exports.qbx_core:Notify(Lang:t("station_amount_invalid"), 'error', 7500) return end
+                if not fuelPrice then exports.qbx_core:Notify(locale("station_amount_invalid"), 'error', 7500) return end
                 NewFuelPrice = tonumber(fuelPrice)
-                if NewFuelPrice < Config.MinimumFuelPrice then exports.qbx_core:Notify(Lang:t("station_price_too_low"), 'error', 7500) return end
+                if NewFuelPrice < Config.MinimumFuelPrice then exports.qbx_core:Notify(locale("station_price_too_low"), 'error', 7500) return end
                 if NewFuelPrice > Config.MaxFuelPrice then
-                    exports.qbx_core:Notify(Lang:t("station_price_too_high"), "error")
+                    exports.qbx_core:Notify(locale("station_price_too_high"), "error")
                 else
                     TriggerServerEvent("cdn-fuel:station:server:updatefuelprice", NewFuelPrice, CurrentLocation)
                 end
@@ -501,7 +501,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -513,11 +513,11 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
 
             lib.registerContext({
                 id = 'sellstationmenu',
-                title = Lang:t("menu_sell_station_header")..Config.GasStations[location].label,
+                title = locale("menu_sell_station_header")..Config.GasStations[location].label,
                 options = {
                     {
-                        title = Lang:t("menu_sell_station_header_accept"),
-                        description = Lang:t("menu_sell_station_footer_accept")..Comma_Value(SalePrice)..".",
+                        title = locale("menu_sell_station_header_accept"),
+                        description = locale("menu_sell_station_footer_accept")..Comma_Value(SalePrice)..".",
                         icon = "fas fa-usd",
                         arrow = false, -- puts arrow to the right
                         event = 'cdn-fuel:stations:client:sellstation',
@@ -527,8 +527,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                         }
                     },
                     {
-                        title = Lang:t("menu_header_close"),
-                        description = Lang:t("menu_refuel_cancel"),
+                        title = locale("menu_header_close"),
+                        description = locale("menu_refuel_cancel"),
                         icon = "fas fa-times-circle",
                         arrow = false, -- puts arrow to the right
                         onSelect = function()
@@ -550,7 +550,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -571,15 +571,15 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
             NewNameName = NewName[2]
             if NewName then
                 if Config.FuelDebug then lib.print.debug("Attempting to alter stations name!") end
-                if not NewNameName then exports.qbx_core:Notify(Lang:t("station_name_invalid"), 'error', 7500) return end
+                if not NewNameName then exports.qbx_core:Notify(locale("station_name_invalid"), 'error', 7500) return end
                 NewName = NewNameName
-                if type(NewName) ~= "string" then exports.qbx_core:Notify(Lang:t("station_name_invalid"), 'error') return end
-                if Config.ProfanityList[NewName] then exports.qbx_core:Notify(Lang:t("station_name_invalid"), 'error', 7500)
+                if type(NewName) ~= "string" then exports.qbx_core:Notify(locale("station_name_invalid"), 'error') return end
+                if Config.ProfanityList[NewName] then exports.qbx_core:Notify(locale("station_name_invalid"), 'error', 7500)
                     -- You can add logs for people that put prohibited words into the name changer if wanted, and here is where you would do it.
                     return
                 end
-                if string.len(NewName) > Config.NameChangeMaxChar then exports.qbx_core:Notify(Lang:t("station_name_too_long"), 'error') return end
-                if string.len(NewName) < Config.NameChangeMinChar then exports.qbx_core:Notify(Lang:t("station_name_too_short"), 'error') return end
+                if string.len(NewName) > Config.NameChangeMaxChar then exports.qbx_core:Notify(locale("station_name_too_long"), 'error') return end
+                if string.len(NewName) < Config.NameChangeMinChar then exports.qbx_core:Notify(locale("station_name_too_short"), 'error') return end
                 Wait(100)
                 TriggerServerEvent("cdn-fuel:station:server:updatelocationname", NewName, CurrentLocation)
             end
@@ -594,7 +594,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -608,10 +608,10 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
 
                 lib.registerContext({
                     id = 'stationmanagemenu',
-                    title = Lang:t("menu_manage_header")..Config.GasStations[location].label,
+                    title = locale("menu_manage_header")..Config.GasStations[location].label,
                     options = {
                         {
-                            title = Lang:t("menu_manage_reserves_header"),
+                            title = locale("menu_manage_reserves_header"),
                             description = 'Buy your reserve fuel here!',
                             icon = "fas fa-info-circle",
                             arrow = true, -- puts arrow to the right
@@ -620,12 +620,12 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                                 location = location,
                             },
                             metadata = {
-                                {label = 'Reserve Stock: ', value = ReserveLevels..Lang:t("menu_manage_reserves_footer_1")..Config.MaxFuelReserves},
+                                {label = 'Reserve Stock: ', value = ReserveLevels..locale("menu_manage_reserves_footer_1")..Config.MaxFuelReserves},
                             },
                             disabled = ReservesNotBuyable,
                         },
                         {
-                            title = Lang:t("menu_alter_fuel_price_header"),
+                            title = locale("menu_alter_fuel_price_header"),
                             description = "I want to change the price of fuel at my Gas Station!",
                             icon = "fas fa-usd",
                             arrow = false, -- puts arrow to the right
@@ -634,28 +634,28 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                                 location = location,
                             },
                             metadata = {
-                                {label = 'Current Fuel Price: ', value = "$"..Comma_Value(StationFuelPrice)..Lang:t("input_alter_fuel_price_header_2")},
+                                {label = 'Current Fuel Price: ', value = "$"..Comma_Value(StationFuelPrice)..locale("input_alter_fuel_price_header_2")},
                             },
                             disabled = CanNotChangeFuelPrice,
                         },
                         {
-                            title = Lang:t("menu_manage_company_funds_header"),
-                            description = Lang:t("menu_manage_company_funds_footer"),
+                            title = locale("menu_manage_company_funds_header"),
+                            description = locale("menu_manage_company_funds_footer"),
                             icon = "fas fa-usd",
                             arrow = false, -- puts arrow to the right
                             event = 'cdn-fuel:stations:client:managefunds'
                         },
                         {
-                            title = Lang:t("menu_manage_change_name_header"),
-                            description = Lang:t("menu_manage_change_name_footer"),
+                            title = locale("menu_manage_change_name_header"),
+                            description = locale("menu_manage_change_name_footer"),
                             icon = "fas fa-pen",
                             arrow = false, -- puts arrow to the right
                             event = 'cdn-fuel:stations:client:changestationname',
                             disabled = not Config.GasStationNameChanges,
                         },
                         {
-                            title = Lang:t("menu_sell_station_header_accept"),
-                            description = Lang:t("menu_manage_sell_station_footer")..Comma_Value(math.percent(Config.GasStationSellPercentage, GasStationCost)),
+                            title = locale("menu_sell_station_header_accept"),
+                            description = locale("menu_manage_sell_station_footer")..Comma_Value(math.percent(Config.GasStationSellPercentage, GasStationCost)),
                             icon = "fas fa-usd",
                             arrow = false, -- puts arrow to the right
                             event = 'cdn-fuel:stations:client:sellstation:menu',
@@ -664,8 +664,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                             },
                         },
                         {
-                            title = Lang:t("menu_header_close"),
-                            description = Lang:t("menu_refuel_cancel"),
+                            title = locale("menu_header_close"),
+                            description = locale("menu_refuel_cancel"),
                             icon = "fas fa-times-circle",
                             arrow = false, -- puts arrow to the right
                             onSelect = function()
@@ -686,7 +686,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -698,11 +698,11 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
 
             lib.registerContext({
                 id = 'managefundsmenu',
-                title = Lang:t("menu_manage_company_funds_header_2")..Config.GasStations[CurrentLocation].label,
+                title = locale("menu_manage_company_funds_header_2")..Config.GasStations[CurrentLocation].label,
                 options = {
                     {
-                        title = Lang:t("menu_manage_company_funds_withdraw_header"),
-                        description = Lang:t("menu_manage_company_funds_withdraw_footer"),
+                        title = locale("menu_manage_company_funds_withdraw_header"),
+                        description = locale("menu_manage_company_funds_withdraw_footer"),
                         icon = "fas fa-arrow-left",
                         arrow = false, -- puts arrow to the right
                         event = 'cdn-fuel:stations:client:WithdrawFunds',
@@ -711,8 +711,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                         }
                     },
                     {
-                        title = Lang:t("menu_manage_company_funds_deposit_header"),
-                        description = Lang:t("menu_manage_company_funds_deposit_footer"),
+                        title = locale("menu_manage_company_funds_deposit_header"),
+                        description = locale("menu_manage_company_funds_deposit_footer"),
                         icon = "fas fa-arrow-right",
                         arrow = false, -- puts arrow to the right
                         event = 'cdn-fuel:stations:client:DepositFunds',
@@ -721,8 +721,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                         }
                     },
                     {
-                        title = Lang:t("menu_manage_company_funds_return_header"),
-                        description = Lang:t("menu_manage_company_funds_return_footer"),
+                        title = locale("menu_manage_company_funds_return_header"),
+                        description = locale("menu_manage_company_funds_return_footer"),
                         icon = "fas fa-circle-left",
                         arrow = false, -- puts arrow to the right
                         event = 'cdn-fuel:stations:client:managemenu',
@@ -731,8 +731,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                         }
                     },
                     {
-                        title = Lang:t("menu_header_close"),
-                        description = Lang:t("menu_refuel_cancel"),
+                        title = locale("menu_header_close"),
+                        description = locale("menu_refuel_cancel"),
                         icon = "fas fa-times-circle",
                         arrow = false, -- puts arrow to the right
                         onSelect = function()
@@ -755,7 +755,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -779,12 +779,12 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("Attempting to Withdraw!") end
                 Wait(100)
                 local amount = tonumber(WithdrawAmounts)
-                if not WithdrawAmounts then exports.qbx_core:Notify(Lang:t("station_amount_invalid"), 'error', 7500) return end
-                if amount < 1 then exports.qbx_core:Notify(Lang:t("station_withdraw_too_little"), 'error', 7500) return end
-                if amount > StationBalance then exports.qbx_core:Notify(Lang:t("station_withdraw_too_much"), 'error', 7500) return end
+                if not WithdrawAmounts then exports.qbx_core:Notify(locale("station_amount_invalid"), 'error', 7500) return end
+                if amount < 1 then exports.qbx_core:Notify(locale("station_withdraw_too_little"), 'error', 7500) return end
+                if amount > StationBalance then exports.qbx_core:Notify(locale("station_withdraw_too_much"), 'error', 7500) return end
                 WithdrawAmount = tonumber(amount)
                 if (StationBalance - WithdrawAmount) < 0 then
-                    exports.qbx_core:Notify(Lang:t("station_withdraw_too_much"), 'error', 7500)
+                    exports.qbx_core:Notify(locale("station_withdraw_too_much"), 'error', 7500)
                 else
                     TriggerServerEvent('cdn-fuel:station:server:Withdraw', amount, location, StationBalance)
                 end
@@ -802,7 +802,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
                 CanOpen = true
             else
-                exports.qbx_core:Notify(Lang:t("station_not_owner"), 'error', 7500)
+                exports.qbx_core:Notify(locale("station_not_owner"), 'error', 7500)
                 if Config.FuelDebug then lib.print.debug("The Location: "..CurrentLocation.." is not owned by ID: "..CitizenID) end
                 CanOpen = false
             end
@@ -827,11 +827,11 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                 if Config.FuelDebug then lib.print.debug("Attempting to Deposit!") end
                 Wait(100)
                 local amount = tonumber(DepositAmounts)
-                if not DepositAmounts then exports.qbx_core:Notify(Lang:t("station_amount_invalid"), 'error', 7500) return end
-                if amount < 1 then exports.qbx_core:Notify(Lang:t("station_deposit_too_little"), 'error', 7500) return end
+                if not DepositAmounts then exports.qbx_core:Notify(locale("station_amount_invalid"), 'error', 7500) return end
+                if amount < 1 then exports.qbx_core:Notify(locale("station_deposit_too_little"), 'error', 7500) return end
                 DepositAmount = tonumber(amount)
                 if (DepositAmount) > bankmoney then
-                    exports.qbx_core:Notify(Lang:t("station_deposity_too_much"), "error")
+                    exports.qbx_core:Notify(locale("station_deposity_too_much"), "error")
                 else
                     TriggerServerEvent('cdn-fuel:station:server:Deposit', amount, location, StationBalance)
                 end
@@ -868,7 +868,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
 
 
         if bankmoney < costofstation then
-            exports.qbx_core:Notify(Lang:t("not_enough_money_in_bank").." $"..costofstation, 'error', 7500) return
+            exports.qbx_core:Notify(locale("not_enough_money_in_bank").." $"..costofstation, 'error', 7500) return
         end
 
         lib.registerContext({
@@ -876,7 +876,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
             title = Config.GasStations[location].label,
             options = {
                 {
-                    title = Lang:t("menu_purchase_station_confirm_header"),
+                    title = locale("menu_purchase_station_confirm_header"),
                     description = 'I am interested in purchasing this station!',
                     icon = "fas fa-usd",
                     arrow = true, -- puts arrow to the right
@@ -885,12 +885,12 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                         location = location,
                     },
                     metadata = {
-                        {label = 'Station Cost: $', value = Comma_Value(costofstation)..Lang:t("menu_purchase_station_header_2")},
+                        {label = 'Station Cost: $', value = Comma_Value(costofstation)..locale("menu_purchase_station_header_2")},
                     },
                 },
                 {
-                    title = Lang:t("menu_header_close"),
-                    description = Lang:t("menu_refuel_cancel"),
+                    title = locale("menu_header_close"),
+                    description = locale("menu_refuel_cancel"),
                     icon = "fas fa-times-circle",
                     arrow = false, -- puts arrow to the right
                     onSelect = function()
@@ -954,8 +954,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
             title = Config.GasStations[CurrentLocation].label,
             options = {
                 {
-                    title = Lang:t("menu_ped_manage_location_header"),
-                    description = Lang:t("menu_ped_manage_location_footer"),
+                    title = locale("menu_ped_manage_location_header"),
+                    description = locale("menu_ped_manage_location_footer"),
                     icon = "fas fa-gas-pump",
                     arrow = false, -- puts arrow to the right
                     event = 'cdn-fuel:stations:client:managemenu',
@@ -963,8 +963,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                     disabled = DisableOwnerMenu,
                 },
                 {
-                    title = Lang:t("menu_ped_purchase_location_header"),
-                    description = Lang:t("menu_ped_purchase_location_footer"),
+                    title = locale("menu_ped_purchase_location_header"),
+                    description = locale("menu_ped_purchase_location_footer"),
                     icon = "fas fa-usd",
                     arrow = false, -- puts arrow to the right
                     event = 'cdn-fuel:stations:client:purchasemenu',
@@ -972,8 +972,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                     disabled = DisablePurchase,
                 },
                 {
-                    title = Lang:t("menu_ped_emergency_shutoff_header"),
-                    description = Lang:t("menu_ped_emergency_shutoff_footer")..PumpState,
+                    title = locale("menu_ped_emergency_shutoff_header"),
+                    description = locale("menu_ped_emergency_shutoff_footer")..PumpState,
                     icon = "fas fa-gas-pump",
                     arrow = false, -- puts arrow to the right
                     event = 'cdn-fuel:stations:client:Shutoff',
@@ -981,8 +981,8 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
                     disabled = ShutOffDisabled,
                 },
                 {
-                    title = Lang:t("menu_header_close"),
-                    description = Lang:t("menu_refuel_cancel"),
+                    title = locale("menu_header_close"),
+                    description = locale("menu_refuel_cancel"),
                     icon = "fas fa-times-circle",
                     arrow = false, -- puts arrow to the right
                     onSelect = function()

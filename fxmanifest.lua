@@ -1,8 +1,18 @@
 fx_version 'cerulean'
 game 'gta5'
+
+name 'cdn-fuel'
 author 'https://github.com/icarius' -- Base Refueling System: (https://github.com/InZidiuZ/LegacyFuel), other code by Codine (https://www.github.com/CodineDev).
 description 'Qbox version of cdn-fuel'
 version '2.1.9'
+
+ox_lib 'locale'
+
+shared_scripts {
+    '@ox_lib/init.lua', -- OX_Lib, only line this in if you have ox_lib and are using them.
+    '@qbx_core/modules/lib.lua',
+    'shared/config.lua',
+}
 
 client_scripts {
     '@PolyZone/client.lua',
@@ -21,15 +31,10 @@ server_scripts {
     'server/electric_sv.lua',
 }
 
-shared_scripts {
-    'shared/config.lua',
-    '@ox_lib/init.lua', -- OX_Lib, only line this in if you have ox_lib and are using them.
-    '@qbx_core/modules/lib.lua',
-    'locales/en.lua', -- English Locales
-    -- 'locales/de.lua', -- German / Deutsch Locales
-    -- 'locales/fr.lua', -- French / Français Locales
-    -- 'locales/es.lua', -- Spanish / Español / Española Locales
-    -- 'locales/ee.lua', -- Estonian Locales
+files {
+    'locales/*.lua',
+    'stream/[electric_nozzle]/electric_nozzle_typ.ytyp',
+    'stream/[electric_charger]/electric_charger_typ.ytyp',
 }
 
 exports { -- Call with exports['cdn-fuel']:GetFuel or exports['cdn-fuel']:SetFuel
