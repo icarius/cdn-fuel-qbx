@@ -1,7 +1,9 @@
+
+
 ![Codine Development Fuel Script Banner](https://i.imgur.com/qVOMMvW.png)
 
-# _CDN-Fuel (2.1.9)_ 
-
+# _CDN-Fuel (2.1.9) WIP_ 
+Please note that this resource **may be broken due to ongoing changes.**
 A highly in-depth fuel system for **FiveM** with support for the **QBox**.
 
 # _Lastest Patch Information_
